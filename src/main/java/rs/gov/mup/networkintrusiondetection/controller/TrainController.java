@@ -38,7 +38,7 @@ public class TrainController {
     }
 
     @GetMapping("/check")
-    public ResponseEntity<Integer> check() {
+    public ResponseEntity<String> check() {
         return ResponseEntity.ok(trainService.provera());
     }
 }

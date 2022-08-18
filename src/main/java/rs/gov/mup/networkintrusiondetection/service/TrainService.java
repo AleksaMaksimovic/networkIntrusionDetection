@@ -447,7 +447,7 @@ public class TrainService {
         return calculationDto;
     }
 
-    public Integer provera() {
+    public String provera() {
         Integer brojac = 0;
         List<Train> trainList = findAll();
         for (Train train : trainList) {
@@ -455,6 +455,7 @@ public class TrainService {
                 brojac += 1;
             }
         }
-        return brojac;
+        return "Number of correct predictions is : " + brojac + "\n" +
+                "Number of incorrect predictions is : " + (trainList.size() - brojac);
     }
 }
