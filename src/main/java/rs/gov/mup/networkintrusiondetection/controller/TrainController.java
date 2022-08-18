@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import rs.gov.mup.networkintrusiondetection.dto.CalculationDto;
 import rs.gov.mup.networkintrusiondetection.model.Train;
 import rs.gov.mup.networkintrusiondetection.service.TrainService;
 
@@ -29,5 +30,15 @@ public class TrainController {
     @GetMapping("/predictAll")
     public ResponseEntity<String> predictAll() {
         return ResponseEntity.ok(trainService.predictAll());
+    }
+
+    @GetMapping("/calculate")
+    public ResponseEntity<CalculationDto> calculate() {
+        return ResponseEntity.ok(trainService.calculate());
+    }
+
+    @GetMapping("/check")
+    public ResponseEntity<Integer> check() {
+        return ResponseEntity.ok(trainService.provera());
     }
 }

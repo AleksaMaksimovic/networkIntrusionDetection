@@ -2,6 +2,7 @@ package rs.gov.mup.networkintrusiondetection.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rs.gov.mup.networkintrusiondetection.dto.CalculationDto;
 import rs.gov.mup.networkintrusiondetection.model.Train;
 import rs.gov.mup.networkintrusiondetection.repository.TrainRepository;
 
@@ -394,5 +395,66 @@ public class TrainService {
             trainRepository.save(train);
         }
         return "ok";
+    }
+
+
+    public CalculationDto calculate() {
+        //  inicijalizacija objekta CalculationDto
+        CalculationDto calculationDto = new CalculationDto();
+
+        //  inicijalizacija promenljivih u koje će biti smešteni rezultati prebrojavanja
+        int truePositive = 0;
+        int trueNegative = 0;
+        int falsePositive = 0;
+        int falseNegative = 0;
+
+        //inicijalizacija liste objekata tipa Train i njeno popunjavanje podacima iz baze podataka
+        List<Train> list = findAll();
+
+        //  foreach petlja koja prolazi kroz sve objekte unutar liste i inkrementuje brojače za TP,TN,FP,FN u zavisnosti od ispunjenosti uslova
+        for (Train train : list) {
+            if (train.getType().equals("normal")) {
+                if (train.getTypePredicted().equals("normal")) {
+                    truePositive += 1;
+                } else {
+                    falseNegative += 1;
+                }
+            } else {
+                if (train.getTypePredicted().equals("normal")) {
+                    falsePositive += 1;
+                } else {
+                    trueNegative += 1;
+                }
+            }
+        }
+
+        //  setovanje atributa objekta calculationDto na izračunate vrednosti
+        calculationDto.setFalseNegative(falseNegative);
+        calculationDto.setFalsePositive(falsePositive);
+        calculationDto.setTrueNegative(trueNegative);
+        calculationDto.setTruePositive(truePositive);
+
+        //  programska implementacija formula za računanje vrednosti Accuracy, Precision, Sensitivity, Specificity, FScore, Tpr, Fpr
+        calculationDto.setAccuracy((double) (truePositive + trueNegative) / (truePositive + trueNegative + falsePositive + falseNegative));
+        calculationDto.setPrecision((double) truePositive / (truePositive + falsePositive));
+        calculationDto.setSensitivity((double) truePositive / (truePositive + falseNegative));
+        calculationDto.setSpecificity((double) trueNegative / (trueNegative + falsePositive));
+        calculationDto.setFScore(2 * calculationDto.getPrecision() * calculationDto.getSensitivity() / (calculationDto.getPrecision() + calculationDto.getSensitivity()));
+        calculationDto.setTpr((double) truePositive / (truePositive + falseNegative));
+        calculationDto.setFpr((double) falsePositive / (falsePositive + trueNegative));
+
+        //  vraćanje objekta calculationDto kao rezultat servisa
+        return calculationDto;
+    }
+
+    public Integer provera() {
+        Integer brojac = 0;
+        List<Train> trainList = findAll();
+        for (Train train : trainList) {
+            if (train.getType().equals(train.getTypePredicted())) {
+                brojac += 1;
+            }
+        }
+        return brojac;
     }
 }
