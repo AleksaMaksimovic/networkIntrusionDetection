@@ -1,13 +1,15 @@
 package rs.gov.mup.networkintrusiondetection.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Builder
+@AllArgsConstructor
 @Entity
+@Table(name = "Test", schema = "intrusion_detection")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -56,5 +58,6 @@ public class Test {
     private Long dstHostSrvSerrorRate;
     private Long dstHostRerrorRate;
     private Long dstHostSrvRerrorRate;
+    private String type;
     private String typePredicted;
 }

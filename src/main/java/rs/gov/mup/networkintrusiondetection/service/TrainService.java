@@ -413,14 +413,14 @@ public class TrainService {
 
         //  foreach petlja koja prolazi kroz sve objekte unutar liste i inkrementuje brojače za TP,TN,FP,FN u zavisnosti od ispunjenosti uslova
         for (Train train : list) {
-            if (train.getType().equals("normal")) {
-                if (train.getTypePredicted().equals("normal")) {
+            if (train.getType().equals("anomaly")) {
+                if (train.getTypePredicted().equals("anomaly")) {
                     truePositive += 1;
                 } else {
                     falseNegative += 1;
                 }
             } else {
-                if (train.getTypePredicted().equals("normal")) {
+                if (train.getTypePredicted().equals("anomaly")) {
                     falsePositive += 1;
                 } else {
                     trueNegative += 1;
